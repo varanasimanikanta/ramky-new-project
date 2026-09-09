@@ -15,6 +15,7 @@ import { Route as BusinessesRouteImport } from './routes/businesses'
 import { Route as CareersRouteImport } from './routes/careers'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as NewsRouteImport } from './routes/news'
+import { Route as PortalRouteImport } from './routes/portal'
 import { Route as SustainabilityRouteImport } from './routes/sustainability'
 import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
 import { Route as ProjectsSlugRouteImport } from './routes/projects.$slug'
@@ -49,6 +50,11 @@ const NewsRoute = NewsRouteImport.update({
   path: '/news',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PortalRoute = PortalRouteImport.update({
+  id: '/portal',
+  path: '/portal',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SustainabilityRoute = SustainabilityRouteImport.update({
   id: '/sustainability',
   path: '/sustainability',
@@ -72,6 +78,7 @@ export interface FileRoutesByFullPath {
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
   '/news': typeof NewsRoute
+  '/portal': typeof PortalRoute
   '/sustainability': typeof SustainabilityRoute
   '/projects/$slug': typeof ProjectsSlugRoute
   '/projects/': typeof ProjectsIndexRoute
@@ -83,6 +90,7 @@ export interface FileRoutesByTo {
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
   '/news': typeof NewsRoute
+  '/portal': typeof PortalRoute
   '/sustainability': typeof SustainabilityRoute
   '/projects/$slug': typeof ProjectsSlugRoute
   '/projects': typeof ProjectsIndexRoute
@@ -95,6 +103,7 @@ export interface FileRoutesById {
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
   '/news': typeof NewsRoute
+  '/portal': typeof PortalRoute
   '/sustainability': typeof SustainabilityRoute
   '/projects/$slug': typeof ProjectsSlugRoute
   '/projects/': typeof ProjectsIndexRoute
@@ -108,6 +117,7 @@ export interface FileRouteTypes {
     | '/careers'
     | '/contact'
     | '/news'
+    | '/portal'
     | '/sustainability'
     | '/projects/$slug'
     | '/projects/'
@@ -119,6 +129,7 @@ export interface FileRouteTypes {
     | '/careers'
     | '/contact'
     | '/news'
+    | '/portal'
     | '/sustainability'
     | '/projects/$slug'
     | '/projects'
@@ -130,6 +141,7 @@ export interface FileRouteTypes {
     | '/careers'
     | '/contact'
     | '/news'
+    | '/portal'
     | '/sustainability'
     | '/projects/$slug'
     | '/projects/'
@@ -142,6 +154,7 @@ export interface RootRouteChildren {
   CareersRoute: typeof CareersRoute
   ContactRoute: typeof ContactRoute
   NewsRoute: typeof NewsRoute
+  PortalRoute: typeof PortalRoute
   SustainabilityRoute: typeof SustainabilityRoute
   ProjectsSlugRoute: typeof ProjectsSlugRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
@@ -191,6 +204,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NewsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/portal': {
+      id: '/portal'
+      path: '/portal'
+      fullPath: '/portal'
+      preLoaderRoute: typeof PortalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sustainability': {
       id: '/sustainability'
       path: '/sustainability'
@@ -222,6 +242,7 @@ const rootRouteChildren: RootRouteChildren = {
   CareersRoute: CareersRoute,
   ContactRoute: ContactRoute,
   NewsRoute: NewsRoute,
+  PortalRoute: PortalRoute,
   SustainabilityRoute: SustainabilityRoute,
   ProjectsSlugRoute: ProjectsSlugRoute,
   ProjectsIndexRoute: ProjectsIndexRoute,

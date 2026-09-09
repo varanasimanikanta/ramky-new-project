@@ -398,3 +398,18 @@ cd <repository-name>
 npm i
 npm run dev
 ```
+
+## Firebase authentication
+
+The `/portal` page uses Firebase Authentication for email/password and mobile OTP sign-in. Enable the Email/Password and Phone providers in Firebase Console → Authentication → Sign-in method, then add `localhost` and the production domain in Authentication → Settings → Authorized domains.
+
+No separate authentication API or session cookie is required: Firebase securely persists the user session in the browser. The legacy endpoint contract below is not used by this Firebase integration.
+
+| Endpoint                  | Request body              | Successful response                                 |
+| ------------------------- | ------------------------- | --------------------------------------------------- |
+| `POST /email/sign-in`     | `{ "email", "password" }` | `{ "user": { "id", "name?", "email?", "phone?" } }` |
+| `POST /phone/request-otp` | `{ "phone" }`             | `{ "expiresInSeconds"? }`                           |
+| `POST /phone/verify-otp`  | `{ "phone", "otp" }`      | `{ "user": { "id", "name?", "email?", "phone?" } }` |
+| `GET /session`            | —                         | `{ "user": { "id", "name?", "email?", "phone?" } }` |
+
+Passwords and OTPs are handled by Firebase and are never saved by this application. Configure Firestore Security Rules before reading or writing user data.
