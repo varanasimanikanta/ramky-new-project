@@ -6,10 +6,8 @@ import {
   useRouter,
   HeadContent,
   Scripts,
-  useRouterState,
 } from "@tanstack/react-router";
-import { useEffect, useState, type ReactNode } from "react";
-import { LoaderCircle } from "lucide-react";
+import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import ramkyLogo from "@/assets/ramky-infrastructure-logo.png";
@@ -17,7 +15,6 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { Toaster } from "@/components/ui/sonner";
-import { getSignedInUser } from "@/lib/auth-client";
 import { initializeFirebaseAnalytics } from "@/lib/firebase";
 
 function NotFoundComponent() {
@@ -140,39 +137,10 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  const router = useRouter();
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const isPortal = pathname.startsWith("/portal");
-  const [authentication, setAuthentication] = useState<
-    "checking" | "authenticated" | "unauthenticated"
-  >("checking");
 
   useEffect(() => {
     initializeFirebaseAnalytics();
   }, []);
-
-  useEffect(() => {
-    if (isPortal) return;
-
-    let active = true;
-    setAuthentication("checking");
-    void getSignedInUser().then((user) => {
-      if (active) setAuthentication(user ? "authenticated" : "unauthenticated");
-    });
-
-    return () => {
-      active = false;
-    };
-  }, [isPortal]);
-
-  useEffect(() => {
-    if (isPortal || authentication !== "unauthenticated") return;
-
-    window.sessionStorage.setItem("portal-return-to", pathname);
-    void router.navigate({ to: "/portal" });
-  }, [authentication, isPortal, pathname, router]);
-
-  const isAccessAllowed = isPortal || authentication === "authenticated";
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -182,23 +150,12 @@ function RootComponent() {
       >
         Skip to content
       </a>
-      {isAccessAllowed ? (
-        <>
-          {!isPortal && <Header />}
-          <main id="main">
-            {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-            <Outlet />
-          </main>
-          {!isPortal && <Footer />}
-        </>
-      ) : (
-        <main id="main" className="surface-deep flex min-h-screen items-center justify-center px-4">
-          <div className="flex items-center gap-3 text-sm text-primary-foreground">
-            <LoaderCircle className="size-5 animate-spin text-accent" aria-hidden="true" />
-            {authentication === "checking" ? "Checking your sign-in…" : "Opening sign in…"}
-          </div>
-        </main>
-      )}
+      <Header />
+      <main id="main">
+        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+        <Outlet />
+      </main>
+      <Footer />
       <Toaster />
     </QueryClientProvider>
   );

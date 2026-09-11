@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Menu, X, LockKeyhole } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Menu, X } from "lucide-react";
 import { Logo } from "./Logo";
 
 const nav = [
@@ -39,14 +38,6 @@ export function Header() {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-2 xl:flex">
-          <Button asChild variant="outline" size="sm">
-            <Link to="/portal">
-              <LockKeyhole aria-hidden="true" /> Employee Portal
-            </Link>
-          </Button>
-        </div>
-
         <button
           type="button"
           className="inline-flex size-10 items-center justify-center rounded-md border border-border xl:hidden"
@@ -73,11 +64,6 @@ export function Header() {
                 {item.label}
               </Link>
             ))}
-            <Button asChild variant="outline" className="mt-3">
-              <Link to="/portal" onClick={() => setOpen(false)}>
-                <LockKeyhole aria-hidden="true" /> Employee Portal
-              </Link>
-            </Button>
           </nav>
         </div>
       )}
